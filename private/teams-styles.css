@@ -1,0 +1,171 @@
+/* Global Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  /* Body: blue gradient background */
+  body {
+    background: linear-gradient(120deg, #2980b9, #6dd5fa);
+    color: #fff;
+    min-height: 100vh;
+    padding: 2rem;
+  }
+  
+  /* Header styling */
+  header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  header h1 {
+    font-size: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  /* Main container */
+  main {
+    max-width: 800px;
+    margin: 0 auto;
+    background: rgba(0,0,0,0.3);
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.5);
+  }
+  
+  /* My Team Section */
+  #myTeamSection {
+    margin-bottom: 2rem;
+  }
+  #myTeamSection h2 {
+    margin-bottom: 1rem;
+  }
+  #myTeamInfo {
+    padding: 1rem;
+    background: rgba(255,255,255,0.2);
+    border-radius: 4px;
+  }
+  #noTeamActions {
+    margin-top: 1rem;
+  }
+  #noTeamActions button {
+    margin-right: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: #2980b9;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  #noTeamActions button:hover {
+    background: #1c6fa5;
+  }
+  
+  /* Join & Create Team Sections */
+  #joinTeamSection, #createTeamSection {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background: rgba(255,255,255,0.2);
+    border-radius: 4px;
+  }
+  #joinTeamSection h3, #createTeamSection h3 {
+    margin-bottom: 1rem;
+  }
+  #joinTeamSection input, #createTeamSection input {
+    padding: 0.5rem;
+    margin-right: 0.5rem;
+    border: 1px solid rgba(255,255,255,0.5);
+    border-radius: 4px;
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    outline: none;
+  }
+  #joinTeamSection button, #createTeamSection button {
+    padding: 0.5rem 1rem;
+    background: #2980b9;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    cursor: pointer;
+    margin-right: 0.5rem;
+  }
+  #joinTeamSection button:hover, #createTeamSection button:hover {
+    background: #1c6fa5;
+  }
+  #joinTeamSection div, #createTeamSection div {
+    margin-top: 1rem;
+    color: yellow;
+  }
+  
+  /* All Teams Section */
+  #allTeamsSection {
+    margin-top: 2rem;
+  }
+  #allTeamsSection h2 {
+    margin-bottom: 1rem;
+  }
+  
+  /* Teams Search */
+  .teams-search {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  .teams-search label {
+    font-weight: 500;
+    color: #fff;
+  }
+  .teams-search input {
+    padding: 0.5rem;
+    border: 1px solid rgba(255,255,255,0.5);
+    border-radius: 4px;
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    outline: none;
+  }
+  .teams-search button {
+    padding: 0.5rem 1rem;
+    background: #2980b9;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    cursor: pointer;
+  }
+  .teams-search button:hover {
+    background: #1c6fa5;
+  }
+  
+  /* Teams List */
+  #teamsList {
+    margin-bottom: 1rem;
+  }
+  .team-item {
+    padding: 0.75rem;
+    border-bottom: 1px solid rgba(255,255,255,0.3);
+  }
+  .team-item:last-child {
+    border-bottom: none;
+  }
+  
+  /* Pagination Controls */
+  #teamsPagination {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  #teamsPagination button {
+    padding: 0.5rem 0.75rem;
+    background: #fff;
+    color: #2980b9;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  #teamsPagination button.active {
+    background: #2980b9;
+    color: #fff;
+  }
+  

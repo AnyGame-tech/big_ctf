@@ -4,23 +4,293 @@
   <meta charset="UTF-8" />
   <title>Dashboard</title>
   <link rel="stylesheet" href="/dashboard-styles.css" />
+  <!-- Chart.js for scoreboard -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <!-- NAVBAR -->
   <nav class="dashboard-navbar">
-    <div class="nav-brand">MyBrand</div>
-    <ul class="nav-links">
-      <li><a href="#">Dashboard</a></li>
-      <li><a href="#">Profile</a></li>
-      <li><a href="#">Settings</a></li>
-      <li><a href="/logout">Logout</a></li>
-    </ul>
+    <div class="nav-left">
+      <div class="nav-brand">CTUniversity CTF</div>
+    </div>
+    <div class="nav-center">
+      <ul class="nav-links">
+        <li><a href="#" data-target="dashboard-content">Dashboard</a></li>
+        <li><a href="#" data-target="rules-section">Rules</a></li>
+        <li><a href="#" data-target="prizes-section">Prizes</a></li>
+        <li><a href="#" data-target="users-section">Users</a></li>
+        <li><a href="#" data-target="teamPageLink">Teams</a></li>
+        <li><a href="#" data-target="scoreboard-section">Scoreboard</a></li>
+        <li><a href="#" data-target="challenges-section">Challenges</a></li>
+      </ul>
+    </div>
+    <div class="nav-right">
+      <ul class="nav-links">
+        <li><a href="#" data-target="notifications-section">Notifications</a></li>
+        <!-- The Team link remains in the navbar -->
+        <li><a href="#" id="teamPageLink">Team</a></li>
+        <li><a href="#" data-target="profile-section">Profile</a></li>
+        <li><a href="#" data-target="settings-section">Settings</a></li>
+        <li><a href="/logout">Logout</a></li>
+      </ul>
+    </div>
   </nav>
 
-  <!-- MAIN DASHBOARD CONTENT -->
-  <div class="dashboard-content">
+  <!-- MAIN SECTIONS -->
+  <section id="dashboard-content" class="info-section">
     <h1>Welcome to your Dashboard!</h1>
     <p>You have successfully logged in.</p>
-  </div>
+  </section>
+
+  <section id="rules-section" class="info-section" style="display: none;">
+    <h2>Rules</h2>
+    <p>Competition rules go here.</p>
+  </section>
+
+  <section id="prizes-section" class="info-section" style="display: none;">
+    <h2>Prizes</h2>
+    <p>Prize details go here.</p>
+  </section>
+
+  <!-- USERS SECTION WITH SEARCH & PAGINATION -->
+  <section id="users-section" class="info-section" style="display: none;">
+    <h2>Users</h2>
+    <div class="users-search">
+      <label for="userSearchInput">Search Users:</label>
+      <input type="text" id="userSearchInput" placeholder="Enter username" />
+      <button id="userSearchBtn">Search</button>
+    </div>
+    <div id="usersList">
+      <!-- User items will be populated by JavaScript -->
+    </div>
+    <div id="usersPagination">
+      <!-- Pagination buttons will be generated here -->
+    </div>
+  </section>
+
+  <!-- SCOREBOARD SECTION -->
+  <section id="scoreboard-section" class="info-section" style="display: none;">
+    <div class="card">
+      <div class="card-header">
+        <h2>Top 10 Teams</h2>
+        <div class="tabs">
+          <button class="tab-btn active" data-tab="score-graph">Score Graph</button>
+          <button class="tab-btn" data-tab="standings">Current Standings</button>
+        </div>
+      </div>
+      <div class="card-content">
+        <div class="tab-content active" id="score-graph">
+          <div class="chart-container">
+            <canvas id="scoreChart"></canvas>
+          </div>
+        </div>
+        <div class="tab-content" id="standings">
+          <div class="standings-list" id="standingsList">
+            <!-- Standings will be populated by JavaScript -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="challenges-section" class="info-section" style="display: none;">
+    <h2>Challenges</h2>
+    <p>Challenge details go here.</p>
+  </section>
+
+  <section id="notifications-section" class="info-section" style="display: none;">
+    <h2>Notifications</h2>
+    <p>All important announcements or updates go here.</p>
+  </section>
+
+  <section id="profile-section" class="info-section" style="display: none;">
+    <h2>Profile</h2>
+    <p>Your profile details and edit options go here.</p>
+  </section>
+
+  <section id="settings-section" class="info-section" style="display: none;">
+    <h2>Settings</h2>
+    <p>Manage your account or platform settings here.</p>
+  </section>
+
+  <!-- MAIN SCRIPT -->
+  <script>
+    // ===== Dashboard Tab Switching =====
+    const navLinks = document.querySelectorAll('.nav-links a[data-target]');
+    const sections = document.querySelectorAll('.info-section');
+    navLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetId = link.getAttribute('data-target');
+        sections.forEach(sec => sec.style.display = 'none');
+        const targetSection = document.getElementById(targetId);
+        if (targetSection) targetSection.style.display = 'block';
+        // If Users section, fetch and render user list
+        if (targetId === 'users-section') {
+          fetchUsers();
+        }
+      });
+    });
+
+    // Redirect Team link to separate Teams page
+    document.getElementById('teamPageLink').addEventListener('click', (e) => {
+      e.preventDefault();
+      window.location.href = '/teams';
+    });
+
+    // ===== Users List with Search & Pagination =====
+    let allUsers = [];
+    let currentUsersPage = 1;
+    const usersPageSize = 5;
+
+    function fetchUsers() {
+      fetch('/api/users')
+        .then(response => response.json())
+        .then(data => {
+          allUsers = data;
+          currentUsersPage = 1;
+          renderUsersList();
+        })
+        .catch(err => console.error('Error fetching users:', err));
+    }
+
+    function renderUsersList() {
+      const searchInput = document.getElementById('userSearchInput');
+      const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
+      let filtered = allUsers.filter(user => user.username.toLowerCase().includes(query));
+      const totalPages = Math.ceil(filtered.length / usersPageSize);
+      if (currentUsersPage > totalPages) currentUsersPage = totalPages || 1;
+      const start = (currentUsersPage - 1) * usersPageSize;
+      const pageUsers = filtered.slice(start, start + usersPageSize);
+
+      const usersList = document.getElementById('usersList');
+      usersList.innerHTML = '';
+      pageUsers.forEach(user => {
+        const div = document.createElement('div');
+        div.className = 'user-item';
+        div.textContent = user.username;
+        usersList.appendChild(div);
+      });
+
+      renderUsersPagination(totalPages);
+    }
+
+    function renderUsersPagination(totalPages) {
+      const paginationDiv = document.getElementById('usersPagination');
+      paginationDiv.innerHTML = '';
+      for (let i = 1; i <= totalPages; i++) {
+        const btn = document.createElement('button');
+        btn.textContent = i;
+        if (i === currentUsersPage) {
+          btn.classList.add('active');
+        }
+        btn.addEventListener('click', () => {
+          currentUsersPage = i;
+          renderUsersList();
+        });
+        paginationDiv.appendChild(btn);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const searchBtn = document.getElementById('userSearchBtn');
+      const searchInput = document.getElementById('userSearchInput');
+      if (searchBtn && searchInput) {
+        searchBtn.addEventListener('click', () => {
+          currentUsersPage = 1;
+          renderUsersList();
+        });
+        searchInput.addEventListener('keyup', () => {
+          currentUsersPage = 1;
+          renderUsersList();
+        });
+      }
+    });
+
+    // ===== Scoreboard Script (Unchanged) =====
+    const mockScoreData = [
+      { time: '01:00', 'Team Alpha': 0, 'Team Beta': 50, 'Team Gamma': 100, 'Team Delta': 0 },
+      { time: '02:00', 'Team Alpha': 500, 'Team Beta': 1100, 'Team Gamma': 800, 'Team Delta': 600 },
+      { time: '03:00', 'Team Alpha': 1200, 'Team Beta': 1500, 'Team Gamma': 1400, 'Team Delta': 1300 },
+      { time: '04:00', 'Team Alpha': 2000, 'Team Beta': 2200, 'Team Gamma': 2400, 'Team Delta': 2100 }
+    ];
+    const COLORS = ['#8884d8', '#82ca9d', '#ffc658', '#ff8042'];
+    const scoreboardTeams = Object.keys(mockScoreData[0]).filter(k => k !== 'time');
+
+    function initializeChart() {
+      const ctx = document.getElementById('scoreChart').getContext('2d');
+      const datasets = scoreboardTeams.map((team, index) => ({
+        label: team,
+        data: mockScoreData.map(entry => entry[team]),
+        borderColor: COLORS[index % COLORS.length],
+        backgroundColor: 'transparent',
+        tension: 0.1,
+        pointRadius: 4,
+        pointHoverRadius: 6
+      }));
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: mockScoreData.map(entry => entry.time),
+          datasets
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: { beginAtZero: true },
+            x: { display: true }
+          },
+          plugins: {
+            legend: { position: 'bottom' },
+            tooltip: { mode: 'index', intersect: false }
+          }
+        }
+      });
+    }
+
+    function populateStandings() {
+      const standingsList = document.getElementById('standingsList');
+      standingsList.innerHTML = '';
+      const latest = mockScoreData[mockScoreData.length - 1];
+      const sorted = scoreboardTeams.map(t => ({
+        name: t,
+        score: latest[t]
+      })).sort((a, b) => b.score - a.score);
+      sorted.forEach((team, i) => {
+        const color = COLORS[i % COLORS.length];
+        const item = document.createElement('div');
+        item.className = 'standing-item';
+        item.innerHTML = `
+          <div class="team-info">
+            <div class="team-color" style="background-color: ${color}"></div>
+            <span class="team-name">${i+1}. ${team.name}</span>
+          </div>
+          <span class="team-score">${team.score} pts</span>
+        `;
+        standingsList.appendChild(item);
+      });
+    }
+
+    function setupScoreboardTabs() {
+      const tabButtons = document.querySelectorAll('#scoreboard-section .tab-btn');
+      const tabContents = document.querySelectorAll('#scoreboard-section .tab-content');
+      tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          tabButtons.forEach(btn => btn.classList.remove('active'));
+          tabContents.forEach(tc => tc.classList.remove('active'));
+          button.classList.add('active');
+          const tabId = button.getAttribute('data-tab');
+          document.getElementById(tabId).classList.add('active');
+        });
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      setupScoreboardTabs();
+      initializeChart();
+      populateStandings();
+    });
+  </script>
 </body>
 </html>

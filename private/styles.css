@@ -1,4 +1,4 @@
-/* RESET & GLOBAL STYLES */
+/* Global Reset */
 * {
   margin: 0;
   padding: 0;
@@ -6,62 +6,243 @@
   font-family: 'Poppins', sans-serif;
 }
 
-/* BODY: Purple Gradient */
+/* Body: gradient background, padding for navbar offset */
 body {
-  /* Dark purple gradient background */
-  background: linear-gradient(120deg, #1B002F, #380051);
+  background: linear-gradient(120deg, #2980b9, #6dd5fa);
   color: #fff;
   min-height: 100vh;
+  padding-top: 60px; /* offset for fixed navbar */
 }
 
-/* NAVBAR WRAPPER */
-.navbar {
-  background: #2C0E4A;          /* Slightly lighter purple for the nav bar */
+/* Fixed Navbar */
+.dashboard-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 9999;
   height: 60px;
+  background: #fff;
   display: flex;
   align-items: center;
-  justify-content: space-between; /* space between left, center, right */
-  padding: 0 1.5rem;
-  border-bottom: 2px solid #f726f7; /* Neon pink border at the bottom */
+  justify-content: space-between;
   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  padding: 0 1.5rem;
 }
 
-/* NAVBAR SECTIONS */
-.navbar-left,
-.navbar-center,
-.navbar-right {
+/* Navbar sections */
+.nav-left,
+.nav-right {
+  position: absolute;
+  top: 0;
+  bottom: 0;
   display: flex;
   align-items: center;
-  gap: 1.5rem; /* spacing between links */
+}
+.nav-left { left: 1.5rem; }
+.nav-right { right: 1.5rem; }
+
+.nav-center {
+  width: 100%;
+  text-align: center;
+}
+.nav-center .nav-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: inline-flex;
+  gap: 1.5rem;
+}
+.nav-right .nav-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: inline-flex;
+  gap: 1.5rem;
 }
 
-/* BRAND NAME */
-.brand {
-  font-size: 1.2rem;
+/* Nav link styling */
+.nav-links li a {
+  text-decoration: none;
+  color: #2980b9;
+  font-weight: 500;
+  transition: opacity 0.3s;
+}
+.nav-links li a:hover {
+  opacity: 0.7;
+}
+
+/* Brand styling */
+.nav-brand {
+  font-size: 1.5rem;
   font-weight: 600;
-  color: #f726f7; /* Neon pink/purple */
   text-transform: uppercase;
   letter-spacing: 1px;
+  color: #2980b9;
 }
 
-/* NAV LINKS (CENTER + RIGHT) */
-.navbar-center a,
-.navbar-right a {
-  text-decoration: none;
+/* Info sections (dashboard tabs) */
+.info-section {
+  background: rgba(255,255,255,0.2);
+  margin: 2rem auto;
+  max-width: 1000px;
+  padding: 2rem;
+  border-radius: 8px;
+}
+.info-section h2 {
+  margin-bottom: 1rem;
   color: #fff;
+}
+.info-section p {
+  font-size: 1rem;
+  color: #f0f0f0;
+}
+
+/* Scoreboard card */
+.card {
+  background: #fff;
+  color: #333;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+.card-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+.card-header h2 {
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+.tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  background-color: #e2e8f0;
+  padding: 0.5rem;
+  border-radius: 4px;
+}
+.tab-btn {
+  padding: 0.75rem 1rem;
+  background: none;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
   font-weight: 500;
-  transition: color 0.3s, opacity 0.3s;
+  transition: background-color 0.2s;
+  color: #333;
+}
+.tab-btn.active {
+  background-color: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+.card-content {
+  padding: 1.5rem;
+}
+.tab-content {
+  display: none;
+}
+.tab-content.active {
+  display: block;
+}
+.chart-container {
+  height: 500px;
+  width: 100%;
+  position: relative;
+}
+.standings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.standing-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background: #e2e8f0;
+  border-radius: 4px;
+}
+.team-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.team-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+.team-name {
+  font-weight: 500;
+}
+.team-score {
+  font-weight: 700;
 }
 
-/* HOVER EFFECT FOR LINKS */
-.navbar-center a:hover,
-.navbar-right a:hover {
-  color: #f726f7; /* Neon pink on hover */
-  opacity: 0.9;
-}
-
-/* DASHBOARD CONTENT */
+/* Default dashboard content */
 .dashboard-content {
   text-align: center;
-  margin: 2rem;
+  padding: 2rem;
+}
+
+/* Styling for Users List in the Users Section */
+#usersList {
+  margin-top: 1rem;
+}
+.user-item {
+  padding: 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+.user-item:last-child {
+  border-bottom: none;
+}
+
+/* Styling for Users Search and Pagination */
+.users-search {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  justify-content: center;
+}
+.users-search label {
+  color: #fff;
+  font-weight: 500;
+}
+.users-search input {
+  padding: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  outline: none;
+}
+.users-search button {
+  padding: 0.5rem 1rem;
+  background: #2980b9;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.users-search button:hover {
+  background: #1c6fa5;
+}
+
+#usersPagination {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+#usersPagination button {
+  padding: 0.5rem 0.75rem;
+  background: #fff;
+  color: #2980b9;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+#usersPagination button.active {
+  background: #2980b9;
+  color: #fff;
 }

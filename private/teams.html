@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>CTUniversity CTF - Teams</title>
+  <link rel="stylesheet" href="/teams-styles.css" />
+</head>
+<body>
+  <header>
+    <h1>CTUniversity CTF - Teams</h1>
+  </header>
+  <main>
+    <!-- My Team Section -->
+    <section id="myTeamSection">
+      <h2>My Team</h2>
+      <div id="myTeamInfo">
+        <!-- Current team details will be displayed here -->
+      </div>
+      <div id="noTeamActions" style="display: none;">
+        <button id="showJoinForm">Join Team</button>
+        <button id="showCreateForm">Create Team</button>
+      </div>
+    </section>
+
+    <!-- Join Team Form -->
+    <section id="joinTeamSection" style="display: none;">
+      <h3>Join a Team</h3>
+      <input type="text" id="joinTeamName" placeholder="Team Name" />
+      <input type="password" id="joinTeamPassword" placeholder="Team Password" />
+      <button id="submitJoinTeam">Join</button>
+      <button id="cancelJoinTeam">Cancel</button>
+      <div id="joinTeamMessage"></div>
+    </section>
+
+    <!-- Create Team Form -->
+    <section id="createTeamSection" style="display: none;">
+      <h3>Create a Team</h3>
+      <input type="text" id="createTeamName" placeholder="Team Name" />
+      <input type="password" id="createTeamPassword" placeholder="Team Password" />
+      <button id="submitCreateTeam">Create</button>
+      <button id="cancelCreateTeam">Cancel</button>
+      <div id="createTeamMessage"></div>
+    </section>
+
+    <!-- All Teams List with Search & Pagination -->
+    <section id="allTeamsSection">
+      <h2>All Teams</h2>
+      <div class="teams-search">
+        <label for="teamSearchInput">Search Teams:</label>
+        <input type="text" id="teamSearchInput" placeholder="Enter team name" />
+        <button id="teamSearchBtn">Search</button>
+      </div>
+      <div id="teamsList">
+        <!-- Teams will be rendered here -->
+      </div>
+      <div id="teamsPagination">
+        <!-- Pagination buttons will be generated here -->
+      </div>
+    </section>
+  </main>
+  <script src="/teams.js"></script>
+</body>
+</html>
