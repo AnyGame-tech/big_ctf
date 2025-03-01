@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>All Users</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>All Registered Users</h1>
+  <ul id="userList"></ul>
+
+  <script>
+    async function loadUsers() {
+      try {
+        const res = await fetch('/api/users');
+        const users = await res.json();
+        const userList = document.getElementById('userList');
+        userList.innerHTML = ''; // clear any old data
+
+        users.forEach(u => {
+          const li = document.createElement('li');
+          li.textContent = `${u.username} (${u.email})`;
+          userList.appendChild(li);
+        });
+      } catch (err) {
+        console.error('Failed to fetch users:', err);
+      }
+    }
+    loadUsers();
+  </script>
+</body>
+</html>

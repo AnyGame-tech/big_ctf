@@ -1,0 +1,191 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+  
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(120deg, #2980b9, #6dd5fa);
+}
+  
+/* Container for toggling Sign In / Sign Up */
+.container {
+    display: flex;
+    width: 800px;
+    height: 500px;
+    background: #fff;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    position: relative;
+    transition: 0.6s ease-in-out;
+}
+  
+/* Forms Container */
+.forms-container {
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    transition: 0.6s;
+}
+  
+/* Sign In & Sign Up Forms */
+.sign-in-form,
+.sign-up-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+}
+  
+.sign-in-form h2,
+.sign-up-form h2 {
+    margin-bottom: 0.5rem;
+}
+  
+.input-field {
+    width: 100%;
+    background: #f0f0f0;
+    padding: 12px;
+    border-radius: 8px;
+}
+  
+.input-field input {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 1rem;
+}
+  
+/* Buttons */
+.btn {
+    width: 100%;
+    background: #3498db;
+    color: #fff;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+  
+.btn:hover {
+    background: #2980b9;
+}
+  
+.error-message {
+    color: red;
+    font-size: 0.9rem;
+}
+  
+/* Panels Container */
+.panels-container {
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    transition: 0.6s;
+}
+  
+/* Panel common styles */
+.panel {
+    display: none; /* We'll toggle these panels with sign-up-mode */
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+  
+.panel .content {
+    color: #fff;  /* Ensure panel content is white */
+}
+  
+/* Button for panels (override for panel side) */
+.panels-container .btn.transparent {
+    background: none;
+    border: 2px solid #fff;
+    color: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 20px;
+}
+  
+.panels-container .btn.transparent:hover {
+    background: #fff;
+    color: #2C3E50; /* or choose a contrasting color */
+}
+  
+/* ===================================== */
+/*          TOGGLE LOGIC IN CSS          */
+/* ===================================== */
+  
+/* By default, show Sign In form, hide Sign Up form */
+.sign-up-form {
+    display: none;
+}
+  
+/* Show only the right panel by default */
+.panel.right-panel {
+    display: flex;
+}
+.panel.left-panel {
+    display: none;
+}
+  
+/* If .container has .sign-up-mode, toggle the forms */
+.container.sign-up-mode .sign-in-form {
+    display: none;
+}
+.container.sign-up-mode .sign-up-form {
+    display: flex;
+}
+  
+/* Also toggle the panels */
+.container.sign-up-mode .panel.left-panel {
+    display: flex;
+}
+.container.sign-up-mode .panel.right-panel {
+    display: none;
+}
+  
+/* ===================================== */
+/*       SWAP THE FLEX ORDER             */
+/* ===================================== */
+/* Default (Sign In mode): forms on left, panel on right */
+.container:not(.sign-up-mode) .forms-container {
+    order: 1;
+}
+.container:not(.sign-up-mode) .panels-container {
+    order: 2;
+}
+  
+/* Sign Up mode: forms on right, panel on left */
+.container.sign-up-mode .forms-container {
+    order: 2;
+}
+.container.sign-up-mode .panels-container {
+    order: 1;
+}
+  
+/* ===================================== */
+/*      COLORING THE PANEL SIDE          */
+/* ===================================== */
+/* A soft blue gradient on the panel side for both modes */
+.container:not(.sign-up-mode) .panels-container,
+.container.sign-up-mode .panels-container {
+  background: linear-gradient(120deg, #6dd5fa, #2980b9);
+  color: #fff;
+}
