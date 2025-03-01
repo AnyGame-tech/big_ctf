@@ -1,0 +1,67 @@
+/* RESET & GLOBAL STYLES */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* BODY: Purple Gradient */
+body {
+  /* Dark purple gradient background */
+  background: linear-gradient(120deg, #1B002F, #380051);
+  color: #fff;
+  min-height: 100vh;
+}
+
+/* NAVBAR WRAPPER */
+.navbar {
+  background: #2C0E4A;          /* Slightly lighter purple for the nav bar */
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* space between left, center, right */
+  padding: 0 1.5rem;
+  border-bottom: 2px solid #f726f7; /* Neon pink border at the bottom */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* NAVBAR SECTIONS */
+.navbar-left,
+.navbar-center,
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem; /* spacing between links */
+}
+
+/* BRAND NAME */
+.brand {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #f726f7; /* Neon pink/purple */
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* NAV LINKS (CENTER + RIGHT) */
+.navbar-center a,
+.navbar-right a {
+  text-decoration: none;
+  color: #fff;
+  font-weight: 500;
+  transition: color 0.3s, opacity 0.3s;
+}
+
+/* HOVER EFFECT FOR LINKS */
+.navbar-center a:hover,
+.navbar-right a:hover {
+  color: #f726f7; /* Neon pink on hover */
+  opacity: 0.9;
+}
+
+/* DASHBOARD CONTENT */
+.dashboard-content {
+  text-align: center;
+  margin: 2rem;
+}
