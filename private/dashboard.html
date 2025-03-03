@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>Dashboard</title>
+  <!-- Link to your merged CSS file -->
   <link rel="stylesheet" href="/dashboard-styles.css" />
   <!-- Chart.js for scoreboard -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -19,7 +20,7 @@
         <li><a href="#" data-target="rules-section">Rules</a></li>
         <li><a href="#" data-target="prizes-section">Prizes</a></li>
         <li><a href="#" data-target="users-section">Users</a></li>
-        <li><a href="#" data-target="teamPageLink">Teams</a></li>
+        <li><a href="#" data-target="teams-section">Teams</a></li>
         <li><a href="#" data-target="scoreboard-section">Scoreboard</a></li>
         <li><a href="#" data-target="challenges-section">Challenges</a></li>
       </ul>
@@ -27,8 +28,7 @@
     <div class="nav-right">
       <ul class="nav-links">
         <li><a href="#" data-target="notifications-section">Notifications</a></li>
-        <!-- The Team link remains in the navbar -->
-        <li><a href="#" id="teamPageLink">Team</a></li>
+        <li><a href="#" id="teamPageLink" data-target="team-section">Team</a></li>
         <li><a href="#" data-target="profile-section">Profile</a></li>
         <li><a href="#" data-target="settings-section">Settings</a></li>
         <li><a href="/logout">Logout</a></li>
@@ -52,7 +52,7 @@
     <p>Prize details go here.</p>
   </section>
 
-  <!-- USERS SECTION WITH SEARCH & PAGINATION -->
+  <!-- USERS SECTION -->
   <section id="users-section" class="info-section" style="display: none;">
     <h2>Users</h2>
     <div class="users-search">
@@ -66,6 +66,57 @@
     <div id="usersPagination">
       <!-- Pagination buttons will be generated here -->
     </div>
+  </section>
+
+  <!-- TEAMS LISTING SECTION -->
+  <section id="teams-section" class="info-section" style="display: none;">
+    <h2>Teams</h2>
+    <div class="teams-search">
+      <label for="teamSearchInput">Search Teams:</label>
+      <input type="text" id="teamSearchInput" placeholder="Enter team name" />
+      <button id="teamSearchBtn">Search</button>
+    </div>
+    <div id="teamsList">
+      <!-- Teams will be rendered here -->
+    </div>
+    <div id="teamsPagination">
+      <!-- Pagination buttons will be generated here -->
+    </div>
+  </section>
+
+  <!-- MY TEAM SECTION (TOP-RIGHT LINK) -->
+  <section id="team-section" class="info-section" style="display: none;">
+    <h1>CTUniversity CTF - My Team</h1>
+    <section id="myTeamSection">
+      <h2>My Team</h2>
+      <div id="myTeamInfo">
+        <!-- Current team details will be displayed here (if in a team) -->
+      </div>
+      <div id="noTeamActions" style="display: none;">
+        <button id="showJoinForm">Join Team</button>
+        <button id="showCreateForm">Create Team</button>
+      </div>
+    </section>
+
+    <!-- Join Team Form -->
+    <section id="joinTeamSection" style="display: none;">
+      <h3>Join a Team</h3>
+      <input type="text" id="joinTeamName" placeholder="Team Name" />
+      <input type="password" id="joinTeamPassword" placeholder="Team Password" />
+      <button id="submitJoinTeam">Join</button>
+      <button id="cancelJoinTeam">Cancel</button>
+      <div id="joinTeamMessage"></div>
+    </section>
+
+    <!-- Create Team Form -->
+    <section id="createTeamSection" style="display: none;">
+      <h3>Create a Team</h3>
+      <input type="text" id="createTeamName" placeholder="Team Name" />
+      <input type="password" id="createTeamPassword" placeholder="Team Password" />
+      <button id="submitCreateTeam">Create</button>
+      <button id="cancelCreateTeam">Cancel</button>
+      <div id="createTeamMessage"></div>
+    </section>
   </section>
 
   <!-- SCOREBOARD SECTION -->
@@ -105,16 +156,21 @@
 
   <section id="profile-section" class="info-section" style="display: none;">
     <h2>Profile</h2>
-    <p>Your profile details and edit options go here.</p>
+    <div id="profileInfo">
+      <!-- Will be filled by JavaScript -->
+    </div>
   </section>
+  
 
   <section id="settings-section" class="info-section" style="display: none;">
     <h2>Settings</h2>
     <p>Manage your account or platform settings here.</p>
   </section>
 
-  <!-- MAIN SCRIPT -->
+
+  <!-- MAIN SCRIPT for scoreboard and user fetching -->
   <script>
+    
     // ===== Dashboard Tab Switching =====
     const navLinks = document.querySelectorAll('.nav-links a[data-target]');
     const sections = document.querySelectorAll('.info-section');
@@ -130,12 +186,6 @@
           fetchUsers();
         }
       });
-    });
-
-    // Redirect Team link to separate Teams page
-    document.getElementById('teamPageLink').addEventListener('click', (e) => {
-      e.preventDefault();
-      window.location.href = '/teams';
     });
 
     // ===== Users List with Search & Pagination =====
@@ -192,22 +242,18 @@
       }
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-      const searchBtn = document.getElementById('userSearchBtn');
-      const searchInput = document.getElementById('userSearchInput');
-      if (searchBtn && searchInput) {
-        searchBtn.addEventListener('click', () => {
-          currentUsersPage = 1;
-          renderUsersList();
-        });
-        searchInput.addEventListener('keyup', () => {
-          currentUsersPage = 1;
-          renderUsersList();
-        });
-      }
-    });
+    document.addEventListener('DOMContentLoaded', function() {
+    const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+    const body = document.body;
+    
+    if (mobileMenuToggle) {
+      mobileMenuToggle.addEventListener('click', function() {
+        body.classList.toggle('mobile-menu-open');
+      });
+    }
+  });
 
-    // ===== Scoreboard Script (Unchanged) =====
+    // ===== Scoreboard Script =====
     const mockScoreData = [
       { time: '01:00', 'Team Alpha': 0, 'Team Beta': 50, 'Team Gamma': 100, 'Team Delta': 0 },
       { time: '02:00', 'Team Alpha': 500, 'Team Beta': 1100, 'Team Gamma': 800, 'Team Delta': 600 },
@@ -253,10 +299,10 @@
       const standingsList = document.getElementById('standingsList');
       standingsList.innerHTML = '';
       const latest = mockScoreData[mockScoreData.length - 1];
-      const sorted = scoreboardTeams.map(t => ({
-        name: t,
-        score: latest[t]
-      })).sort((a, b) => b.score - a.score);
+      const sorted = scoreboardTeams
+        .map(t => ({ name: t, score: latest[t] }))
+        .sort((a, b) => b.score - a.score);
+
       sorted.forEach((team, i) => {
         const color = COLORS[i % COLORS.length];
         const item = document.createElement('div');
@@ -264,7 +310,7 @@
         item.innerHTML = `
           <div class="team-info">
             <div class="team-color" style="background-color: ${color}"></div>
-            <span class="team-name">${i+1}. ${team.name}</span>
+            <span class="team-name">${i + 1}. ${team.name}</span>
           </div>
           <span class="team-score">${team.score} pts</span>
         `;
@@ -286,10 +332,230 @@
       });
     }
 
+    // Initialize scoreboard on DOM load
     document.addEventListener('DOMContentLoaded', () => {
       setupScoreboardTabs();
       initializeChart();
       populateStandings();
+    });
+
+    
+  </script>
+
+  <!-- Inline TEAMS SCRIPT -->
+  <script>
+    let teamsData = [];
+    let currentPage = 1;
+    const pageSize = 5;
+
+    function fetchTeams() {
+      fetch('/api/teams')
+        .then(response => response.json())
+        .then(data => {
+          teamsData = data;
+          currentPage = 1;
+          renderTeams();
+        })
+        .catch(error => console.error('Error fetching teams:', error));
+    }
+
+    function renderTeams() {
+      const searchInput = document.getElementById('teamSearchInput');
+      const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
+      let filtered = teamsData.filter(team =>
+        team.teamName.toLowerCase().includes(query)
+      );
+      const totalPages = Math.ceil(filtered.length / pageSize);
+      if (currentPage > totalPages) currentPage = totalPages || 1;
+      const start = (currentPage - 1) * pageSize;
+      const pageTeams = filtered.slice(start, start + pageSize);
+
+      const teamsList = document.getElementById('teamsList');
+      if (teamsList) {
+        teamsList.innerHTML = '';
+        pageTeams.forEach(team => {
+          // The 'membersNames' array no longer has 'Unknown'
+          const members = team.membersNames && team.membersNames.length
+            ? team.membersNames.join(', ')
+            : 'No members';
+          const div = document.createElement('div');
+          div.className = 'team-item';
+          div.innerHTML = `<strong>${team.teamName}</strong> — Members: ${members}`;
+          teamsList.appendChild(div);
+        });
+      }
+      renderPagination(totalPages);
+    }
+
+    function renderPagination(totalPages) {
+      const paginationDiv = document.getElementById('teamsPagination');
+      if (!paginationDiv) return;
+      paginationDiv.innerHTML = '';
+      for (let i = 1; i <= totalPages; i++) {
+        const btn = document.createElement('button');
+        btn.textContent = i;
+        if (i === currentPage) btn.classList.add('active');
+        btn.addEventListener('click', () => {
+          currentPage = i;
+          renderTeams();
+        });
+        paginationDiv.appendChild(btn);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Setup search event listeners for the TEAMS LIST section
+      const searchBtn = document.getElementById('teamSearchBtn');
+      const searchInput = document.getElementById('teamSearchInput');
+      if (searchBtn && searchInput) {
+        searchBtn.addEventListener('click', () => {
+          currentPage = 1;
+          renderTeams();
+        });
+        searchInput.addEventListener('keyup', () => {
+          currentPage = 1;
+          renderTeams();
+        });
+      }
+      fetchTeams();
+
+      // Fetch and display current user's team ("My Team" section)
+      fetch('/api/myteam')
+        .then(response => response.json())
+        .then(data => {
+          const myTeamInfo = document.getElementById('myTeamInfo');
+          const noTeamActions = document.getElementById('noTeamActions');
+          if (!myTeamInfo || !noTeamActions) return;
+
+          if (data.team) {
+            const members = data.team.membersNames && data.team.membersNames.length
+              ? data.team.membersNames.join(', ')
+              : 'No members';
+            myTeamInfo.innerHTML = `<strong>${data.team.teamName}</strong><br/>Members: ${members}`;
+            noTeamActions.style.display = 'none';
+          } else {
+            myTeamInfo.innerHTML = '<p>You are not in a team.</p>';
+            noTeamActions.style.display = 'block';
+          }
+        })
+        .catch(err => console.error('Error fetching my team:', err));
+
+      // Show/hide join/create forms
+      const showJoinFormBtn = document.getElementById('showJoinForm');
+      const showCreateFormBtn = document.getElementById('showCreateForm');
+      const joinTeamSection = document.getElementById('joinTeamSection');
+      const createTeamSection = document.getElementById('createTeamSection');
+
+      if (showJoinFormBtn && joinTeamSection && createTeamSection) {
+        showJoinFormBtn.addEventListener('click', () => {
+          joinTeamSection.style.display = 'block';
+          createTeamSection.style.display = 'none';
+        });
+      }
+      if (showCreateFormBtn && joinTeamSection && createTeamSection) {
+        showCreateFormBtn.addEventListener('click', () => {
+          createTeamSection.style.display = 'block';
+          joinTeamSection.style.display = 'none';
+        });
+      }
+
+      // Cancel buttons
+      const cancelJoinTeamBtn = document.getElementById('cancelJoinTeam');
+      if (cancelJoinTeamBtn) {
+        cancelJoinTeamBtn.addEventListener('click', () => {
+          joinTeamSection.style.display = 'none';
+        });
+      }
+      const cancelCreateTeamBtn = document.getElementById('cancelCreateTeam');
+      if (cancelCreateTeamBtn) {
+        cancelCreateTeamBtn.addEventListener('click', () => {
+          createTeamSection.style.display = 'none';
+        });
+      }
+
+      // Submit Join Team
+      const submitJoinTeamBtn = document.getElementById('submitJoinTeam');
+      if (submitJoinTeamBtn) {
+        submitJoinTeamBtn.addEventListener('click', () => {
+          const teamName = document.getElementById('joinTeamName').value;
+          const teamPassword = document.getElementById('joinTeamPassword').value;
+          fetch('/api/team/join', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ teamName, password: teamPassword })
+          })
+            .then(res => res.json())
+            .then(data => {
+              const joinTeamMessage = document.getElementById('joinTeamMessage');
+              if (data.error) {
+                joinTeamMessage.innerText = data.error;
+              } else {
+                joinTeamMessage.innerText = data.message;
+                // Refresh My Team section
+                fetch('/api/myteam')
+                  .then(res => res.json())
+                  .then(myData => {
+                    const myTeamInfo = document.getElementById('myTeamInfo');
+                    const noTeamActions = document.getElementById('noTeamActions');
+                    if (myData.team) {
+                      const members = myData.team.membersNames && myData.team.membersNames.length
+                        ? myData.team.membersNames.join(', ')
+                        : 'No members';
+                      myTeamInfo.innerHTML = `<strong>${myData.team.teamName}</strong><br/>Members: ${members}`;
+                      noTeamActions.style.display = 'none';
+                    }
+                  });
+                joinTeamSection.style.display = 'none';
+              }
+            })
+            .catch(err => {
+              console.error('Error joining team:', err);
+              document.getElementById('joinTeamMessage').innerText = 'Error joining team.';
+            });
+        });
+      }
+
+      // Submit Create Team
+      const submitCreateTeamBtn = document.getElementById('submitCreateTeam');
+      if (submitCreateTeamBtn) {
+        submitCreateTeamBtn.addEventListener('click', () => {
+          const teamName = document.getElementById('createTeamName').value;
+          const teamPassword = document.getElementById('createTeamPassword').value;
+          fetch('/api/team/create', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ teamName, password: teamPassword })
+          })
+            .then(res => res.json())
+            .then(data => { 
+              const createTeamMessage = document.getElementById('createTeamMessage');
+              if (data.error) {
+                createTeamMessage.innerText = data.error;
+              } else {
+                createTeamMessage.innerText = data.message;
+                // Refresh My Team section
+                fetch('/api/myteam')
+                  .then(res => res.json())
+                  .then(myData => {
+                    const myTeamInfo = document.getElementById('myTeamInfo');
+                    const noTeamActions = document.getElementById('noTeamActions');
+                    if (myData.team) {
+                      const members = myData.team.membersNames && myData.team.membersNames.length
+                        ? myData.team.membersNames.join(', ')
+                        : 'No members';
+                      myTeamInfo.innerHTML = `<strong>${myData.team.teamName}</strong><br/>Members: ${members}`;
+                      noTeamActions.style.display = 'none';
+                    }
+                  });
+                createTeamSection.style.display = 'none';
+              }
+            })
+            .catch(err => {
+              console.error('Error creating team:', err);
+              document.getElementById('createTeamMessage').innerText = 'Error creating team.';
+            });
+        });
+      }
     });
   </script>
 </body>

@@ -1,248 +1,709 @@
-/* Global Reset */
+/* ------------------------------------------------------ */
+/* GLOBAL RESET & BASE STYLING */
+/* ------------------------------------------------------ */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Inter', sans-serif;
 }
 
-/* Body: gradient background, padding for navbar offset */
+:root {
+  --primary: #2563eb;
+  --primary-dark: #1d4ed8;
+  --secondary: #7c3aed;
+  --accent: #06b6d4;
+  --background: #0f172a;
+  --background-light: #1e293b;
+  --text: #f8fafc;
+  --text-muted: #94a3b8;
+  --border: rgba(255, 255, 255, 0.1);
+  --card-bg: #1e293b;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Body: dark theme with gradient overlay */
 body {
-  background: linear-gradient(120deg, #2980b9, #6dd5fa);
-  color: #fff;
+  background: linear-gradient(135deg, var(--background), var(--background-light));
+  color: var(--text);
   min-height: 100vh;
-  padding-top: 60px; /* offset for fixed navbar */
+  padding-top: 70px; /* offset for fixed navbar */
+  line-height: 1.6;
 }
 
-/* Fixed Navbar */
+/* Fixed Navbar - Glass morphism effect - FIXED LAYOUT */
 .dashboard-navbar {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   z-index: 9999;
-  height: 60px;
-  background: #fff;
+  height: 70px;
+  background: rgba(30, 41, 59, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-  padding: 0 1.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  padding: 0 2rem;
+  border-bottom: 1px solid var(--border);
 }
 
-/* Navbar sections */
-.nav-left,
-.nav-right {
-  position: absolute;
-  top: 0;
-  bottom: 0;
+/* Navbar sections - FIXED LAYOUT */
+.nav-left {
+  flex: 1;
   display: flex;
   align-items: center;
+  justify-content: flex-start;
 }
-.nav-left { left: 1.5rem; }
-.nav-right { right: 1.5rem; }
 
 .nav-center {
-  width: 100%;
-  text-align: center;
-}
-.nav-center .nav-links {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: inline-flex;
-  gap: 1.5rem;
-}
-.nav-right .nav-links {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: inline-flex;
-  gap: 1.5rem;
+  flex: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* Nav link styling */
-.nav-links li a {
-  text-decoration: none;
-  color: #2980b9;
-  font-weight: 500;
-  transition: opacity 0.3s;
-}
-.nav-links li a:hover {
-  opacity: 0.7;
+.nav-right {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }
 
 /* Brand styling */
 .nav-brand {
   font-size: 1.5rem;
-  font-weight: 600;
-  text-transform: uppercase;
+  font-weight: 700;
+  background: linear-gradient(to right, var(--primary), var(--accent));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
   letter-spacing: 1px;
-  color: #2980b9;
+  white-space: nowrap;
 }
 
-/* Info sections (dashboard tabs) */
+/* Nav links container */
+.nav-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.nav-center .nav-links {
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.nav-right .nav-links {
+  justify-content: flex-end;
+}
+
+/* Nav link styling with hover effects */
+.nav-links li a {
+  text-decoration: none;
+  color: var(--text-muted);
+  font-weight: 500;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  position: relative;
+  display: block;
+  white-space: nowrap;
+}
+
+.nav-links li a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: var(--primary);
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+}
+
+.nav-links li a:hover {
+  color: var(--text);
+}
+
+.nav-links li a:hover::after {
+  width: 80%;
+}
+
+/* Mobile menu toggle */
+.mobile-menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
+/* Info sections (dashboard tabs) - Glass morphism cards */
 .info-section {
-  background: rgba(255,255,255,0.2);
+  background: rgba(30, 41, 59, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   margin: 2rem auto;
-  max-width: 1000px;
-  padding: 2rem;
-  border-radius: 8px;
+  max-width: 1100px;
+  padding: 2.5rem;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
 }
+
+.info-section h1 {
+  margin-bottom: 1.5rem;
+  color: var(--text);
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(to right, var(--primary), var(--accent));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
 .info-section h2 {
-  margin-bottom: 1rem;
-  color: #fff;
+  margin-bottom: 1.5rem;
+  color: var(--text);
+  font-size: 2rem;
+  font-weight: 600;
 }
+
 .info-section p {
-  font-size: 1rem;
-  color: #f0f0f0;
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  max-width: 700px;
+  margin: 0 auto;
 }
 
 /* Scoreboard card */
 .card {
-  background: #fff;
-  color: #333;
-  border-radius: 8px;
+  background: var(--card-bg);
+  color: var(--text);
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
 }
+
 .card-header {
-  padding: 1.5rem;
-  border-bottom: 1px solid #e2e8f0;
+  padding: 1.75rem;
+  border-bottom: 1px solid var(--border);
+  background: rgba(15, 23, 42, 0.5);
 }
+
 .card-header h2 {
-  margin-bottom: 1rem;
-  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  font-size: 1.75rem;
+  color: var(--text);
 }
+
 .tabs {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0.5rem;
-  background-color: #e2e8f0;
-  padding: 0.5rem;
-  border-radius: 4px;
+  gap: 0.75rem;
+  background-color: rgba(15, 23, 42, 0.3);
+  padding: 0.75rem;
+  border-radius: 8px;
 }
+
 .tab-btn {
-  padding: 0.75rem 1rem;
+  padding: 0.85rem 1.25rem;
   background: none;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
   font-weight: 500;
-  transition: background-color 0.2s;
-  color: #333;
+  transition: all 0.2s ease;
+  color: var(--text-muted);
+  font-size: 0.95rem;
 }
+
+.tab-btn:hover {
+  color: var(--text);
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
 .tab-btn.active {
-  background-color: #fff;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  background-color: var(--primary);
+  color: white;
+  box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3);
 }
+
 .card-content {
-  padding: 1.5rem;
+  padding: 2rem;
 }
+
 .tab-content {
   display: none;
 }
+
 .tab-content.active {
   display: block;
+  animation: fadeIn 0.3s ease;
 }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 .chart-container {
   height: 500px;
   width: 100%;
   position: relative;
+  padding: 1rem;
 }
+
 .standings-list {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.75rem;
 }
+
 .standing-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.75rem 1rem;
-  background: #e2e8f0;
-  border-radius: 4px;
+  padding: 1rem 1.5rem;
+  background: rgba(15, 23, 42, 0.3);
+  border-radius: 8px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid var(--border);
 }
+
+.standing-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
 .team-info {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-}
-.team-color {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-}
-.team-name {
-  font-weight: 500;
-}
-.team-score {
-  font-weight: 700;
+  gap: 0.75rem;
 }
 
-/* Default dashboard content */
-.dashboard-content {
-  text-align: center;
-  padding: 2rem;
+.team-color {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+}
+
+.team-name {
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+
+.team-score {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--primary);
 }
 
 /* Styling for Users List in the Users Section */
-#usersList {
-  margin-top: 1rem;
+#usersList, #teamsList {
+  margin: 1.5rem 0;
+  background: rgba(15, 23, 42, 0.3);
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--border);
 }
-.user-item {
-  padding: 0.5rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+
+.user-item, .team-item {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  transition: background-color 0.2s ease;
+  text-align: left;
 }
-.user-item:last-child {
+
+.user-item:hover, .team-item:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.user-item:last-child, .team-item:last-child {
   border-bottom: none;
 }
 
-/* Styling for Users Search and Pagination */
-.users-search {
+/* Styling for Search and Pagination */
+.users-search, .teams-search {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
   justify-content: center;
-}
-.users-search label {
-  color: #fff;
-  font-weight: 500;
-}
-.users-search input {
-  padding: 0.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 4px;
-  outline: none;
-}
-.users-search button {
-  padding: 0.5rem 1rem;
-  background: #2980b9;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-.users-search button:hover {
-  background: #1c6fa5;
+  flex-wrap: wrap;
 }
 
-#usersPagination {
-  margin-top: 1rem;
+.users-search label, .teams-search label {
+  color: var(--text);
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+.users-search input, .teams-search input,
+#joinTeamName, #joinTeamPassword, 
+#createTeamName, #createTeamPassword {
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  outline: none;
+  background: rgba(15, 23, 42, 0.3);
+  color: var(--text);
+  font-size: 0.95rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  min-width: 250px;
+}
+
+.users-search input:focus, .teams-search input:focus,
+#joinTeamName:focus, #joinTeamPassword:focus,
+#createTeamName:focus, #createTeamPassword:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+.users-search button, .teams-search button,
+#submitJoinTeam, #submitCreateTeam,
+#showJoinForm, #showCreateForm {
+  padding: 0.75rem 1.25rem;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3);
+}
+
+.users-search button:hover, .teams-search button:hover,
+#submitJoinTeam:hover, #submitCreateTeam:hover,
+#showJoinForm:hover, #showCreateTeam:hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+}
+
+.users-search button:active, .teams-search button:active,
+#submitJoinTeam:active, #submitCreateTeam:active,
+#showJoinForm:active, #showCreateTeam:active {
+  transform: translateY(0);
+}
+
+#usersPagination, #teamsPagination {
+  margin-top: 1.5rem;
   display: flex;
   justify-content: center;
   gap: 0.5rem;
+  flex-wrap: wrap;
 }
-#usersPagination button {
-  padding: 0.5rem 0.75rem;
-  background: #fff;
-  color: #2980b9;
-  border: none;
-  border-radius: 4px;
+
+#usersPagination button, #teamsPagination button,
+#cancelJoinTeam, #cancelCreateTeam {
+  padding: 0.6rem 1rem;
+  background: rgba(15, 23, 42, 0.5);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  border-radius: 8px;
   cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  min-width: 40px;
 }
-#usersPagination button.active {
-  background: #2980b9;
-  color: #fff;
+
+#usersPagination button:hover, #teamsPagination button:hover,
+#cancelJoinTeam:hover, #cancelCreateTeam:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text);
 }
+
+#usersPagination button.active, #teamsPagination button.active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+/* My Team Section */
+#myTeamSection {
+  margin-bottom: 2.5rem;
+  text-align: left;
+}
+
+#myTeamSection h2 {
+  margin-bottom: 1.5rem;
+  position: relative;
+  display: inline-block;
+  padding-bottom: 0.5rem;
+}
+
+#myTeamSection h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 50%;
+  height: 3px;
+  background: linear-gradient(to right, var(--primary), var(--accent));
+  border-radius: 3px;
+}
+
+#myTeamInfo {
+  padding: 1.5rem;
+  background: rgba(15, 23, 42, 0.3);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  line-height: 1.8;
+}
+
+#myTeamInfo strong {
+  font-size: 1.2rem;
+  color: var(--primary);
+}
+
+#noTeamActions {
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* Join & Create Team Sections */
+#joinTeamSection, #createTeamSection {
+  margin: 2rem 0;
+  padding: 2rem;
+  background: rgba(15, 23, 42, 0.3);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  text-align: left;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+#joinTeamSection h3, #createTeamSection h3 {
+  margin-bottom: 1.5rem;
+  color: var(--text);
+  font-size: 1.5rem;
+  position: relative;
+  display: inline-block;
+  padding-bottom: 0.5rem;
+}
+
+#joinTeamSection h3::after, #createTeamSection h3::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 50%;
+  height: 3px;
+  background: linear-gradient(to right, var(--primary), var(--accent));
+  border-radius: 3px;
+}
+
+#joinTeamSection input, #createTeamSection input {
+  display: block;
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 1rem;
+}
+
+#joinTeamSection button, #createTeamSection button {
+  margin-right: 1rem;
+  margin-bottom: 1rem;
+}
+
+#joinTeamMessage, #createTeamMessage {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border-radius: 8px;
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid var(--warning);
+  color: var(--warning);
+  font-weight: 500;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  .nav-center .nav-links li a,
+  .nav-right .nav-links li a {
+    padding: 0.5rem 0.5rem;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 1024px) {
+  .dashboard-navbar {
+    padding: 0 1rem;
+  }
+  
+  .nav-brand {
+    font-size: 1.25rem;
+  }
+  
+  .nav-center {
+    display: none;
+  }
+  
+  .nav-right {
+    display: none;
+  }
+  
+  .mobile-menu-toggle {
+    display: block;
+    margin-left: auto;
+  }
+  
+  .info-section {
+    margin: 1.5rem;
+    padding: 1.5rem;
+  }
+  
+  .card-header {
+    padding: 1.25rem;
+  }
+  
+  .chart-container {
+    height: 400px;
+  }
+  
+  /* Add this to your JavaScript to toggle mobile menu */
+  .mobile-menu-open .nav-center,
+  .mobile-menu-open .nav-right {
+    display: flex;
+    position: absolute;
+    top: 70px;
+    left: 0;
+    width: 100%;
+    flex-direction: column;
+    background: var(--background);
+    padding: 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+  
+  .mobile-menu-open .nav-center .nav-links,
+  .mobile-menu-open .nav-right .nav-links {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .mobile-menu-open .nav-links li {
+    width: 100%;
+  }
+  
+  .mobile-menu-open .nav-links li a {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    padding-top: 60px;
+  }
+  
+  .dashboard-navbar {
+    height: 60px;
+  }
+  
+  .nav-brand {
+    font-size: 1.2rem;
+  }
+  
+  .info-section h1 {
+    font-size: 2rem;
+  }
+  
+  .info-section h2 {
+    font-size: 1.5rem;
+  }
+  
+  .card-header h2 {
+    font-size: 1.5rem;
+  }
+  
+  .chart-container {
+    height: 300px;
+  }
+  
+  .users-search, .teams-search {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .users-search input, .teams-search input {
+    width: 100%;
+    min-width: unset;
+  }
+  
+  .mobile-menu-open .nav-center,
+  .mobile-menu-open .nav-right {
+    top: 60px;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.3);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-dark);
+}
+
+/* Active nav link indicator */
+.nav-links li a.active {
+  color: var(--text);
+  background: rgba(37, 99, 235, 0.1);
+}
+
+.nav-links li a.active::after {
+  width: 80%;
+}
+
+/* Add a subtle hover effect to the navbar */
+.dashboard-navbar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to right, rgba(37, 99, 235, 0.05), transparent, rgba(6, 182, 212, 0.05));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.dashboard-navbar:hover::before {
+  opacity: 1;
+}
+
