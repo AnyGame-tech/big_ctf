@@ -7,6 +7,10 @@
       "user1",
       "1740853273623",
       "1740856466124"
+    ],
+    "score": 2500,
+    "solvedChallenges": [
+      "Forensics"
     ]
   },
   {
@@ -15,8 +19,11 @@
     "password": "$2b$10$bHFMfg40zYqI2/zxizwTOu91H0QT8yH0Zs9CgiMr3xAzXWzmp8mG6",
     "members": [
       "user1",
-      "1740856466124"
-    ]
+      "1740856466124",
+      "1740852168960"
+    ],
+    "score": 1500,
+    "solvedChallenges": []
   },
   {
     "id": "1741022852911",
@@ -24,6 +31,8 @@
     "password": "$2b$10$9X54ryes5oG.gygC5TFq4edXoMem8mTtZp4Ux7j21wWlGMiXUOEku",
     "members": [
       "1741019461873"
-    ]
+    ],
+    "score": 0,
+    "solvedChallenges": []
   }
 ]

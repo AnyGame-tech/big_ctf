@@ -3,14 +3,19 @@
     "id": "1740852168960",
     "username": "66634g",
     "email": "vexifok410@halbov.com",
-    "password": "$2b$10$M0r3TsWyq3cVNdg4.jgVZ.wqhv84gcUYd5gOskm8kIi5ElzOPngAu"
+    "password": "$2b$10$M0r3TsWyq3cVNdg4.jgVZ.wqhv84gcUYd5gOskm8kIi5ElzOPngAu",
+    "teamId": "1741017954277"
   },
   {
     "id": "1740853273623",
     "username": "c1ph3r1337",
     "email": "jaskaran052006@gmail.com",
     "password": "$2b$10$YhRxSEdUXEbKNmS7buqvFOl1m8TrItMe4Rp8g7sqmRqwxH7kv9ZRS",
-    "teamId": "1740870327549"
+    "teamId": "1740870327549",
+    "solvedChallenges": [
+      "Forensics",
+      "OSINT"
+    ]
   },
   {
     "id": "1740856466124",
