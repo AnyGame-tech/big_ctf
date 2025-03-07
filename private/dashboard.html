@@ -3,9 +3,162 @@
 <head>
   <meta charset="UTF-8" />
   <title>Dashboard</title>
-  <!-- Link to your merged CSS file -->
   <link rel="stylesheet" href="/dashboard-styles.css" />
-  <!-- Chart.js for scoreboard -->
+  <!-- You can include your scoreboard stylesheet if needed -->
+  <link rel="stylesheet" href="styles-scoreboard.css" />
+  <style>
+    /* --- Updated Scoreboard UI Styling --- */
+    /* The following CSS only affects the scoreboard section */
+    #scoreboard-section #teamScoreDisplay {
+      margin-bottom: 1.5rem;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text);
+      padding: 1rem;
+      background: rgba(11, 18, 34, 0.4);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    #scoreboard-section #downloadScoreboardBtn {
+      padding: 0.75rem 1.5rem;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-bottom: 1.5rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(7, 178, 213, 0.3);
+    }
+    #scoreboard-section #downloadScoreboardBtn:hover { 
+      background: #06a1c0;
+      transform: translateY(-1px);
+    }
+    /* Card styling remains similar but with minor adjustments */
+    #scoreboard-section .card {
+      background: var(--card-bg);
+      color: var(--text);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    #scoreboard-section .card-header {
+      padding: 2rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(11, 18, 34, 0.6);
+      text-align: center;
+    }
+    #scoreboard-section .card-header h2 {
+      margin-bottom: 1.5rem;
+      font-size: 1.75rem;
+      color: var(--text);
+    }
+    #scoreboard-section .tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      background: rgba(11, 18, 34, 0.4);
+      padding: 0.5rem;
+      border-radius: 12px;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    #scoreboard-section .tab-btn {
+      padding: 0.75rem 1.5rem;
+      background: none;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+    #scoreboard-section .tab-btn:hover {
+      background-color: rgba(255, 255, 255, 0.05);
+      color: var(--text);
+    }
+    #scoreboard-section .tab-btn.active {
+      background-color: var(--primary);
+      color: white;
+      box-shadow: 0 4px 12px rgba(36, 103, 234, 0.3);
+    }
+    #scoreboard-section .card-content {
+      padding: 2rem;
+    }
+    #scoreboard-section .chart-container {
+      height: 400px;
+      width: 100%;
+      position: relative;
+      padding: 1rem;
+      margin-top: 1rem;
+    }
+    /* Standings list with colored circles */
+    #scoreboard-section .standings-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+    #scoreboard-section .standing-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      background: rgba(11, 18, 34, 0.4);
+      border-radius: 12px;
+      transition: transform 0.2s ease, background 0.2s ease;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    #scoreboard-section .standing-item:hover {
+      transform: translateY(-2px);
+      background: rgba(11, 18, 34, 0.6);
+      border-color: rgba(255, 255, 255, 0.12);
+    }
+    #scoreboard-section .team-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    #scoreboard-section .team-color {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+      /* The actual color for each team will be set inline */
+    }
+    #scoreboard-section .team-name {
+      font-weight: 600;
+      font-size: 1.05rem;
+      color: var(--text);
+    }
+    #scoreboard-section .team-score {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--primary);
+    }
+    /* Chart legend styles */
+    #chart-legend {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+    }
+    .legend-color {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+  </style>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
@@ -60,12 +213,8 @@
       <input type="text" id="userSearchInput" placeholder="Enter username" />
       <button id="userSearchBtn">Search</button>
     </div>
-    <div id="usersList">
-      <!-- User items will be populated by JavaScript -->
-    </div>
-    <div id="usersPagination">
-      <!-- Pagination buttons will be generated here -->
-    </div>
+    <div id="usersList"></div>
+    <div id="usersPagination"></div>
   </section>
 
   <!-- TEAMS LISTING SECTION -->
@@ -76,28 +225,21 @@
       <input type="text" id="teamSearchInput" placeholder="Enter team name" />
       <button id="teamSearchBtn">Search</button>
     </div>
-    <div id="teamsList">
-      <!-- Teams will be rendered here -->
-    </div>
-    <div id="teamsPagination">
-      <!-- Pagination buttons will be generated here -->
-    </div>
+    <div id="teamsList"></div>
+    <div id="teamsPagination"></div>
   </section>
 
-  <!-- MY TEAM SECTION (TOP-RIGHT LINK) -->
+  <!-- MY TEAM SECTION -->
   <section id="team-section" class="info-section" style="display: none;">
     <h1>CTUniversity CTF - My Team</h1>
     <section id="myTeamSection">
       <h2>My Team</h2>
-      <div id="myTeamInfo">
-        <!-- Current team details will be displayed here (if in a team) -->
-      </div>
+      <div id="myTeamInfo"></div>
       <div id="noTeamActions" style="display: none;">
         <button id="showJoinForm">Join Team</button>
         <button id="showCreateForm">Create Team</button>
       </div>
     </section>
-
     <!-- Join Team Form -->
     <section id="joinTeamSection" style="display: none;">
       <h3>Join a Team</h3>
@@ -107,7 +249,6 @@
       <button id="cancelJoinTeam">Cancel</button>
       <div id="joinTeamMessage"></div>
     </section>
-
     <!-- Create Team Form -->
     <section id="createTeamSection" style="display: none;">
       <h3>Create a Team</h3>
@@ -121,6 +262,8 @@
 
   <!-- SCOREBOARD SECTION -->
   <section id="scoreboard-section" class="info-section" style="display: none;">
+    <div id="teamScoreDisplay">Your Team Score: N/A</div>
+    <button id="downloadScoreboardBtn">Download Scoreboard CSV</button>
     <div class="card">
       <div class="card-header">
         <h2>Top 10 Teams</h2>
@@ -134,44 +277,63 @@
           <div class="chart-container">
             <canvas id="scoreChart"></canvas>
           </div>
+          <div id="chart-legend"></div>
         </div>
         <div class="tab-content" id="standings">
-          <div class="standings-list" id="standingsList">
-            <!-- Standings will be populated by JavaScript -->
-          </div>
+          <div class="standings-list" id="standingsList"></div>
         </div>
       </div>
     </div>
   </section>
 
+  <!-- CHALLENGES SECTION -->
   <section id="challenges-section" class="info-section" style="display: none;">
     <h2>Challenges</h2>
-    <p>Challenge details go here.</p>
+    <div class="challenge-categories">
+      <div class="challenge-box" data-category="Forensics">Forensics</div>
+      <div class="challenge-box" data-category="Reverse Engineering">Reverse Engineering</div>
+      <div class="challenge-box" data-category="Web Exploitation">Web Exploitation</div>
+      <div class="challenge-box" data-category="OSINT">OSINT</div>
+      <div class="challenge-box" data-category="Crypto">Crypto</div>
+      <div class="challenge-box" data-category="Steganography">Steganography</div>
+      <div class="challenge-box" data-category="Binary Analysis">Binary Analysis</div>
+      <div class="challenge-box" data-category="Miscellaneous">Miscellaneous</div>
+    </div>
   </section>
 
+  <!-- NOTIFICATIONS SECTION -->
   <section id="notifications-section" class="info-section" style="display: none;">
     <h2>Notifications</h2>
     <p>All important announcements or updates go here.</p>
   </section>
 
+  <!-- PROFILE SECTION -->
   <section id="profile-section" class="info-section" style="display: none;">
     <h2>Profile</h2>
-    <div id="profileInfo">
-      <!-- Will be filled by JavaScript -->
-    </div>
+    <div id="profileInfo"></div>
   </section>
-  
 
+  <!-- SETTINGS SECTION -->
   <section id="settings-section" class="info-section" style="display: none;">
     <h2>Settings</h2>
     <p>Manage your account or platform settings here.</p>
   </section>
 
+  <!-- Challenge Modal -->
+  <div id="challengeModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h3 id="modalTitle">Challenge</h3>
+      <p id="challengeDescription">Solve the challenge and submit your flag.</p>
+      <input type="text" id="flagInput" placeholder="Enter flag here" />
+      <button id="submitFlagBtn">Submit Flag</button>
+      <p id="flagResult"></p>
+    </div>
+  </div>
 
-  <!-- MAIN SCRIPT for scoreboard and user fetching -->
+  <!-- MAIN SCRIPT -->
   <script>
-    
-    // ===== Dashboard Tab Switching =====
+    // Dashboard Tab Switching
     const navLinks = document.querySelectorAll('.nav-links a[data-target]');
     const sections = document.querySelectorAll('.info-section');
     navLinks.forEach(link => {
@@ -181,18 +343,39 @@
         sections.forEach(sec => sec.style.display = 'none');
         const targetSection = document.getElementById(targetId);
         if (targetSection) targetSection.style.display = 'block';
-        // If Users section, fetch and render user list
-        if (targetId === 'users-section') {
-          fetchUsers();
+        if (targetId === 'users-section') fetchUsers();
+        if (targetId === 'profile-section') fetchProfile();
+        if (targetId === 'scoreboard-section') {
+          fetchTeamScores();
+          updateChallengeBoxesFromTeam();
         }
       });
     });
 
-    // ===== Users List with Search & Pagination =====
+    // Fetch profile info
+    function fetchProfile() {
+      fetch('/api/profile')
+        .then(res => res.json())
+        .then(data => {
+          const profileDiv = document.getElementById('profileInfo');
+          if (!profileDiv) return;
+          if (data.error) {
+            profileDiv.innerHTML = `<p style="color:red;">${data.error}</p>`;
+          } else {
+            const teamText = data.teamName ? data.teamName : 'No Team';
+            profileDiv.innerHTML = `
+              <h3 style="font-size: 2rem; margin-bottom: 1rem;">${data.username}</h3>
+              <p style="font-size: 1.2rem;">Team: ${teamText}</p>
+            `;
+          }
+        })
+        .catch(err => console.error('Error fetching profile:', err));
+    }
+
+    // Users List with Search & Pagination
     let allUsers = [];
     let currentUsersPage = 1;
     const usersPageSize = 5;
-
     function fetchUsers() {
       fetch('/api/users')
         .then(response => response.json())
@@ -203,7 +386,6 @@
         })
         .catch(err => console.error('Error fetching users:', err));
     }
-
     function renderUsersList() {
       const searchInput = document.getElementById('userSearchInput');
       const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
@@ -212,7 +394,6 @@
       if (currentUsersPage > totalPages) currentUsersPage = totalPages || 1;
       const start = (currentUsersPage - 1) * usersPageSize;
       const pageUsers = filtered.slice(start, start + usersPageSize);
-
       const usersList = document.getElementById('usersList');
       usersList.innerHTML = '';
       pageUsers.forEach(user => {
@@ -221,19 +402,15 @@
         div.textContent = user.username;
         usersList.appendChild(div);
       });
-
       renderUsersPagination(totalPages);
     }
-
     function renderUsersPagination(totalPages) {
       const paginationDiv = document.getElementById('usersPagination');
       paginationDiv.innerHTML = '';
       for (let i = 1; i <= totalPages; i++) {
         const btn = document.createElement('button');
         btn.textContent = i;
-        if (i === currentUsersPage) {
-          btn.classList.add('active');
-        }
+        if (i === currentUsersPage) btn.classList.add('active');
         btn.addEventListener('click', () => {
           currentUsersPage = i;
           renderUsersList();
@@ -241,83 +418,267 @@
         paginationDiv.appendChild(btn);
       }
     }
+    document.addEventListener('DOMContentLoaded', () => {
+      const userSearchBtn = document.getElementById('userSearchBtn');
+      const userSearchInput = document.getElementById('userSearchInput');
+      if (userSearchBtn && userSearchInput) {
+        userSearchBtn.addEventListener('click', () => { currentUsersPage = 1; renderUsersList(); });
+        userSearchInput.addEventListener('keyup', () => { currentUsersPage = 1; renderUsersList(); });
+      }
+    });
 
-    document.addEventListener('DOMContentLoaded', function() {
-    const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
-    const body = document.body;
+    // Team colors for the chart and standings
+    const teamColors = [
+      '#2467ea', // Primary color
+      '#07b2d5', // Accent color
+      '#f67019', // Orange
+      '#f53794', // Pink
+      '#537bc4', // Blue-purple
+      '#4bc0c0', // Teal
+      '#a05195', // Purple
+      '#d45087', // Pink-red
+      '#2f4b7c', // Dark blue
+      '#665191'  // Indigo
+    ];
+
+    // Scoreboard Functions (Updated for time-series chart)
+    let scoreChart;
+    let teamScoreHistory = {}; // Store score history for each team
     
-    if (mobileMenuToggle) {
-      mobileMenuToggle.addEventListener('click', function() {
-        body.classList.toggle('mobile-menu-open');
+    function fetchTeamScores() {
+      // Simulate fetching team scores with timestamps
+      // In a real app, you would fetch this from your API
+      simulateTeamScoreData()
+        .then(data => {
+          // Sort teams by current score (latest timestamp)
+          const sortedTeams = Object.keys(data).map(teamName => {
+            const scoreHistory = data[teamName];
+            const latestScore = scoreHistory[scoreHistory.length - 1].score;
+            return { teamName, score: latestScore, history: scoreHistory };
+          }).sort((a, b) => b.score - a.score);
+          
+          // Take only top 10 teams
+          const topTeams = sortedTeams.slice(0, 10);
+          
+          // Store the score history
+          teamScoreHistory = {};
+          topTeams.forEach(team => {
+            teamScoreHistory[team.teamName] = team.history;
+          });
+          
+          updateTeamScoreDisplay();
+          updateTimeSeriesChart(topTeams);
+          updateStandings(topTeams);
+        })
+        .catch(err => console.error('Error fetching teams:', err));
+    }
+    
+    // Simulate fetching team score data with timestamps
+    function simulateTeamScoreData() {
+      return new Promise((resolve) => {
+        // Get current time and go back 24 hours
+        const now = new Date();
+        const startTime = new Date(now.getTime() - (24 * 60 * 60 * 1000));
+        
+        // Generate team names
+        const teamNames = [
+          "Binary Bandits", "Cyber Sentinels", "Hack Attack", "Digital Defenders",
+          "Code Breakers", "Security Savants", "Packet Pirates", "Firewall Fighters",
+          "Shell Shock", "Crypto Crusaders", "Zero Day Heroes", "Buffer Overflow",
+          "SQL Injectors", "Malware Marauders", "Network Ninjas"
+        ];
+        
+        // Generate random score history for each team
+        const teamData = {};
+        teamNames.slice(0, 15).forEach((teamName, index) => {
+          const scoreHistory = [];
+          let currentScore = 0;
+          
+          // Create 10 time points with increasing scores
+          for (let i = 0; i < 10; i++) {
+            const timePoint = new Date(startTime.getTime() + (i * 2.4 * 60 * 60 * 1000));
+            // Random score increase (weighted by team index to create different rankings)
+            const scoreIncrease = Math.floor(Math.random() * 100) + (15 - index) * 5;
+            currentScore += scoreIncrease;
+            
+            scoreHistory.push({
+              timestamp: timePoint,
+              score: currentScore
+            });
+          }
+          
+          teamData[teamName] = scoreHistory;
+        });
+        
+        resolve(teamData);
       });
     }
-  });
-
-    // ===== Scoreboard Script =====
-    const mockScoreData = [
-      { time: '01:00', 'Team Alpha': 0, 'Team Beta': 50, 'Team Gamma': 100, 'Team Delta': 0 },
-      { time: '02:00', 'Team Alpha': 500, 'Team Beta': 1100, 'Team Gamma': 800, 'Team Delta': 600 },
-      { time: '03:00', 'Team Alpha': 1200, 'Team Beta': 1500, 'Team Gamma': 1400, 'Team Delta': 1300 },
-      { time: '04:00', 'Team Alpha': 2000, 'Team Beta': 2200, 'Team Gamma': 2400, 'Team Delta': 2100 }
-    ];
-    const COLORS = ['#8884d8', '#82ca9d', '#ffc658', '#ff8042'];
-    const scoreboardTeams = Object.keys(mockScoreData[0]).filter(k => k !== 'time');
-
-    function initializeChart() {
+    
+    function updateTeamScoreDisplay() {
+      fetch('/api/myteam')
+        .then(res => res.json())
+        .then(data => {
+          const teamScoreDiv = document.getElementById('teamScoreDisplay');
+          if (data.team && data.team.score != null) {
+            teamScoreDiv.textContent = `Your Team Score: ${data.team.score} pts`;
+          } else {
+            teamScoreDiv.textContent = 'Your Team Score: N/A';
+          }
+        })
+        .catch(err => console.error(err));
+    }
+    
+    function updateTimeSeriesChart(topTeams) {
       const ctx = document.getElementById('scoreChart').getContext('2d');
-      const datasets = scoreboardTeams.map((team, index) => ({
-        label: team,
-        data: mockScoreData.map(entry => entry[team]),
-        borderColor: COLORS[index % COLORS.length],
-        backgroundColor: 'transparent',
-        tension: 0.1,
-        pointRadius: 4,
-        pointHoverRadius: 6
-      }));
-      new Chart(ctx, {
+      
+      // Get all unique timestamps across all teams
+      const allTimestamps = new Set();
+      Object.values(teamScoreHistory).forEach(history => {
+        history.forEach(point => {
+          allTimestamps.add(point.timestamp.getTime());
+        });
+      });
+      
+      // Sort timestamps chronologically
+      const sortedTimestamps = Array.from(allTimestamps).sort((a, b) => a - b);
+      
+      // Format timestamps for display
+      const labels = sortedTimestamps.map(timestamp => {
+        const date = new Date(timestamp);
+        return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + 
+               ' ' + date.toLocaleDateString([], { month: 'short', day: 'numeric' });
+      });
+      
+      // Create datasets for each team
+      const datasets = topTeams.map((team, index) => {
+        const color = teamColors[index % teamColors.length];
+        
+        // Map team's score history to the common timestamp points
+        const data = sortedTimestamps.map(timestamp => {
+          // Find the closest score point that's less than or equal to this timestamp
+          const historyPoints = team.history.filter(point => point.timestamp.getTime() <= timestamp);
+          if (historyPoints.length === 0) return 0;
+          return historyPoints[historyPoints.length - 1].score;
+        });
+        
+        return {
+          label: team.teamName,
+          data: data,
+          borderColor: color,
+          backgroundColor: 'transparent',
+          borderWidth: 2,
+          pointRadius: 3,
+          pointHoverRadius: 5,
+          tension: 0.1
+        };
+      });
+      
+      // Destroy previous chart if it exists
+      if (scoreChart) scoreChart.destroy();
+      
+      // Create new chart
+      scoreChart = new Chart(ctx, {
         type: 'line',
         data: {
-          labels: mockScoreData.map(entry => entry.time),
-          datasets
+          labels: labels,
+          datasets: datasets
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
           scales: {
-            y: { beginAtZero: true },
-            x: { display: true }
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: 'Score',
+                color: 'var(--text)'
+              },
+              ticks: { color: 'var(--text)' },
+              grid: { color: 'rgba(255, 255, 255, 0.1)' }
+            },
+            x: {
+              title: {
+                display: true,
+                text: 'Time',
+                color: 'var(--text)'
+              },
+              ticks: { 
+                color: 'var(--text)',
+                maxRotation: 45,
+                minRotation: 45
+              },
+              grid: { color: 'rgba(255, 255, 255, 0.1)' }
+            }
           },
           plugins: {
-            legend: { position: 'bottom' },
-            tooltip: { mode: 'index', intersect: false }
+            legend: {
+              display: false // Hide the default legend
+            },
+            tooltip: {
+              mode: 'index',
+              intersect: false,
+              backgroundColor: 'rgba(0,0,0,0.8)',
+              titleColor: '#fff',
+              bodyColor: '#fff',
+              borderColor: 'rgba(255, 255, 255, 0.2)',
+              borderWidth: 1,
+              callbacks: {
+                title: function(tooltipItems) {
+                  return tooltipItems[0].label;
+                },
+                label: function(context) {
+                  return context.dataset.label + ': ' + context.parsed.y + ' pts';
+                }
+              }
+            }
+          },
+          interaction: {
+            mode: 'nearest',
+            axis: 'x',
+            intersect: false
           }
         }
       });
+      
+      // Create custom legend
+      updateChartLegend(topTeams);
     }
-
-    function populateStandings() {
+    
+    function updateChartLegend(topTeams) {
+      const legendContainer = document.getElementById('chart-legend');
+      legendContainer.innerHTML = '';
+      
+      topTeams.forEach((team, index) => {
+        const color = teamColors[index % teamColors.length];
+        const legendItem = document.createElement('div');
+        legendItem.className = 'legend-item';
+        legendItem.innerHTML = `
+          <div class="legend-color" style="background-color: ${color};"></div>
+          <span>${team.teamName}</span>
+        `;
+        legendContainer.appendChild(legendItem);
+      });
+    }
+    
+    function updateStandings(teamsData) {
       const standingsList = document.getElementById('standingsList');
       standingsList.innerHTML = '';
-      const latest = mockScoreData[mockScoreData.length - 1];
-      const sorted = scoreboardTeams
-        .map(t => ({ name: t, score: latest[t] }))
-        .sort((a, b) => b.score - a.score);
-
-      sorted.forEach((team, i) => {
-        const color = COLORS[i % COLORS.length];
+      teamsData.forEach((team, i) => {
         const item = document.createElement('div');
         item.className = 'standing-item';
+        const color = teamColors[i % teamColors.length];
         item.innerHTML = `
           <div class="team-info">
-            <div class="team-color" style="background-color: ${color}"></div>
-            <span class="team-name">${i + 1}. ${team.name}</span>
+            <div class="team-color" style="background-color: ${color};"></div>
+            <span class="team-name">${i + 1}. ${team.teamName}</span>
           </div>
           <span class="team-score">${team.score} pts</span>
         `;
         standingsList.appendChild(item);
       });
     }
-
+    
     function setupScoreboardTabs() {
       const tabButtons = document.querySelectorAll('#scoreboard-section .tab-btn');
       const tabContents = document.querySelectorAll('#scoreboard-section .tab-content');
@@ -331,34 +692,56 @@
         });
       });
     }
-
-    // Initialize scoreboard on DOM load
+    
     document.addEventListener('DOMContentLoaded', () => {
       setupScoreboardTabs();
-      initializeChart();
-      populateStandings();
+      fetchTeamScores();
+      updateChallengeBoxesFromTeam();
+      
+      // Set up auto-refresh for scoreboard every 5 minutes
+      setInterval(fetchTeamScores, 5 * 60 * 1000);
     });
 
-    
-  </script>
+    // Function to update challenge boxes based on team members' solved challenges
+    function updateChallengeBoxesFromTeam() {
+      fetch('/api/myteam')
+        .then(res => res.json())
+        .then(myTeamData => {
+          if (myTeamData.team && myTeamData.team.id) {
+            const myTeamId = myTeamData.team.id;
+            fetch('/api/users')
+              .then(res => res.json())
+              .then(allUsersData => {
+                const teamMembers = allUsersData.filter(user => user.teamId === myTeamId);
+                const solvedSet = new Set();
+                teamMembers.forEach(member => {
+                  if (Array.isArray(member.solvedChallenges)) {
+                    member.solvedChallenges.forEach(challenge => solvedSet.add(challenge));
+                  }
+                });
+                solvedSet.forEach(category => {
+                  const box = document.querySelector(`.challenge-box[data-category="${category}"]`);
+                  if (box) {
+                    box.style.backgroundColor = "#2467ea";  
+                  }
+                });
+              })
+              .catch(err => console.error("Error fetching users for team:", err));
+          }
+        })
+        .catch(err => console.error("Error fetching my team:", err));
+    }
 
-  <!-- Inline TEAMS SCRIPT -->
-  <script>
+    // TEAMS SCRIPT (listing teams, search, pagination)
     let teamsData = [];
     let currentPage = 1;
     const pageSize = 5;
-
     function fetchTeams() {
       fetch('/api/teams')
         .then(response => response.json())
-        .then(data => {
-          teamsData = data;
-          currentPage = 1;
-          renderTeams();
-        })
+        .then(data => { teamsData = data; currentPage = 1; renderTeams(); })
         .catch(error => console.error('Error fetching teams:', error));
     }
-
     function renderTeams() {
       const searchInput = document.getElementById('teamSearchInput');
       const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
@@ -369,15 +752,11 @@
       if (currentPage > totalPages) currentPage = totalPages || 1;
       const start = (currentPage - 1) * pageSize;
       const pageTeams = filtered.slice(start, start + pageSize);
-
       const teamsList = document.getElementById('teamsList');
       if (teamsList) {
         teamsList.innerHTML = '';
         pageTeams.forEach(team => {
-          // The 'membersNames' array no longer has 'Unknown'
-          const members = team.membersNames && team.membersNames.length
-            ? team.membersNames.join(', ')
-            : 'No members';
+          const members = team.membersNames && team.membersNames.length ? team.membersNames.join(', ') : 'No members';
           const div = document.createElement('div');
           div.className = 'team-item';
           div.innerHTML = `<strong>${team.teamName}</strong> — Members: ${members}`;
@@ -386,7 +765,6 @@
       }
       renderPagination(totalPages);
     }
-
     function renderPagination(totalPages) {
       const paginationDiv = document.getElementById('teamsPagination');
       if (!paginationDiv) return;
@@ -395,43 +773,27 @@
         const btn = document.createElement('button');
         btn.textContent = i;
         if (i === currentPage) btn.classList.add('active');
-        btn.addEventListener('click', () => {
-          currentPage = i;
-          renderTeams();
-        });
+        btn.addEventListener('click', () => { currentPage = i; renderTeams(); });
         paginationDiv.appendChild(btn);
       }
     }
-
     document.addEventListener('DOMContentLoaded', () => {
-      // Setup search event listeners for the TEAMS LIST section
       const searchBtn = document.getElementById('teamSearchBtn');
       const searchInput = document.getElementById('teamSearchInput');
       if (searchBtn && searchInput) {
-        searchBtn.addEventListener('click', () => {
-          currentPage = 1;
-          renderTeams();
-        });
-        searchInput.addEventListener('keyup', () => {
-          currentPage = 1;
-          renderTeams();
-        });
+        searchBtn.addEventListener('click', () => { currentPage = 1; renderTeams(); });
+        searchInput.addEventListener('keyup', () => { currentPage = 1; renderTeams(); });
       }
       fetchTeams();
-
-      // Fetch and display current user's team ("My Team" section)
       fetch('/api/myteam')
         .then(response => response.json())
         .then(data => {
           const myTeamInfo = document.getElementById('myTeamInfo');
           const noTeamActions = document.getElementById('noTeamActions');
           if (!myTeamInfo || !noTeamActions) return;
-
           if (data.team) {
-            const members = data.team.membersNames && data.team.membersNames.length
-              ? data.team.membersNames.join(', ')
-              : 'No members';
-            myTeamInfo.innerHTML = `<strong>${data.team.teamName}</strong><br/>Members: ${members}`;
+            const members = data.team.membersNames && data.team.membersNames.length ? data.team.membersNames.join(', ') : 'No members';
+            myTeamInfo.innerHTML = `<strong>${data.team.teamName}</strong><br/>Members: ${members}<br/>Score: ${data.team.score || 0} pts`;
             noTeamActions.style.display = 'none';
           } else {
             myTeamInfo.innerHTML = '<p>You are not in a team.</p>';
@@ -439,41 +801,24 @@
           }
         })
         .catch(err => console.error('Error fetching my team:', err));
-
-      // Show/hide join/create forms
       const showJoinFormBtn = document.getElementById('showJoinForm');
       const showCreateFormBtn = document.getElementById('showCreateForm');
       const joinTeamSection = document.getElementById('joinTeamSection');
       const createTeamSection = document.getElementById('createTeamSection');
-
       if (showJoinFormBtn && joinTeamSection && createTeamSection) {
-        showJoinFormBtn.addEventListener('click', () => {
-          joinTeamSection.style.display = 'block';
-          createTeamSection.style.display = 'none';
-        });
+        showJoinFormBtn.addEventListener('click', () => { joinTeamSection.style.display = 'block'; createTeamSection.style.display = 'none'; });
       }
       if (showCreateFormBtn && joinTeamSection && createTeamSection) {
-        showCreateFormBtn.addEventListener('click', () => {
-          createTeamSection.style.display = 'block';
-          joinTeamSection.style.display = 'none';
-        });
+        showCreateFormBtn.addEventListener('click', () => { createTeamSection.style.display = 'block'; joinTeamSection.style.display = 'none'; });
       }
-
-      // Cancel buttons
       const cancelJoinTeamBtn = document.getElementById('cancelJoinTeam');
       if (cancelJoinTeamBtn) {
-        cancelJoinTeamBtn.addEventListener('click', () => {
-          joinTeamSection.style.display = 'none';
-        });
+        cancelJoinTeamBtn.addEventListener('click', () => { joinTeamSection.style.display = 'none'; });
       }
       const cancelCreateTeamBtn = document.getElementById('cancelCreateTeam');
       if (cancelCreateTeamBtn) {
-        cancelCreateTeamBtn.addEventListener('click', () => {
-          createTeamSection.style.display = 'none';
-        });
+        cancelCreateTeamBtn.addEventListener('click', () => { createTeamSection.style.display = 'none'; });
       }
-
-      // Submit Join Team
       const submitJoinTeamBtn = document.getElementById('submitJoinTeam');
       if (submitJoinTeamBtn) {
         submitJoinTeamBtn.addEventListener('click', () => {
@@ -491,17 +836,14 @@
                 joinTeamMessage.innerText = data.error;
               } else {
                 joinTeamMessage.innerText = data.message;
-                // Refresh My Team section
                 fetch('/api/myteam')
                   .then(res => res.json())
                   .then(myData => {
                     const myTeamInfo = document.getElementById('myTeamInfo');
                     const noTeamActions = document.getElementById('noTeamActions');
                     if (myData.team) {
-                      const members = myData.team.membersNames && myData.team.membersNames.length
-                        ? myData.team.membersNames.join(', ')
-                        : 'No members';
-                      myTeamInfo.innerHTML = `<strong>${myData.team.teamName}</strong><br/>Members: ${members}`;
+                      const members = myData.team.membersNames && myData.team.membersNames.length ? myData.team.membersNames.join(', ') : 'No members';
+                      myTeamInfo.innerHTML = `<strong>${myData.team.teamName}</strong><br/>Members: ${members}<br/>Score: ${myData.team.score || 0} pts`;
                       noTeamActions.style.display = 'none';
                     }
                   });
@@ -514,8 +856,6 @@
             });
         });
       }
-
-      // Submit Create Team
       const submitCreateTeamBtn = document.getElementById('submitCreateTeam');
       if (submitCreateTeamBtn) {
         submitCreateTeamBtn.addEventListener('click', () => {
@@ -533,17 +873,14 @@
                 createTeamMessage.innerText = data.error;
               } else {
                 createTeamMessage.innerText = data.message;
-                // Refresh My Team section
                 fetch('/api/myteam')
                   .then(res => res.json())
                   .then(myData => {
                     const myTeamInfo = document.getElementById('myTeamInfo');
                     const noTeamActions = document.getElementById('noTeamActions');
                     if (myData.team) {
-                      const members = myData.team.membersNames && myData.team.membersNames.length
-                        ? myData.team.membersNames.join(', ')
-                        : 'No members';
-                      myTeamInfo.innerHTML = `<strong>${myData.team.teamName}</strong><br/>Members: ${members}`;
+                      const members = myData.team.membersNames && myData.team.membersNames.length ? myData.team.membersNames.join(', ') : 'No members';
+                      myTeamInfo.innerHTML = `<strong>${myData.team.teamName}</strong><br/>Members: ${members}<br/>Score: ${myData.team.score || 0} pts`;
                       noTeamActions.style.display = 'none';
                     }
                   });
@@ -557,6 +894,74 @@
         });
       }
     });
+
+    // CHALLENGE MODAL SCRIPT
+    document.addEventListener('DOMContentLoaded', () => {
+      const challengeBoxes = document.querySelectorAll('.challenge-box');
+      const modal = document.getElementById('challengeModal');
+      const modalTitle = document.getElementById('modalTitle');
+      const flagInput = document.getElementById('flagInput');
+      const flagResult = document.getElementById('flagResult');
+      const submitFlagBtn = document.getElementById('submitFlagBtn');
+      let currentCategory = '';
+      challengeBoxes.forEach(box => {
+        box.addEventListener('click', () => {
+          currentCategory = box.getAttribute('data-category');
+          modalTitle.textContent = currentCategory + ' Challenge';
+          document.getElementById('challengeDescription').textContent = 'Solve the ' + currentCategory + ' challenge and submit your flag.';
+          flagInput.value = '';
+          flagResult.textContent = '';
+          modal.style.display = 'block';
+        });
+      });
+      document.querySelector('.modal .close').addEventListener('click', () => { modal.style.display = 'none'; });
+      window.addEventListener('click', (e) => { if (e.target == modal) modal.style.display = 'none'; });
+      submitFlagBtn.addEventListener('click', () => {
+        const flag = flagInput.value.trim();
+        if (!flag) {
+          flagResult.textContent = 'Please enter a flag.';
+          return;
+        }
+        fetch('/api/challenge/flag', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ category: currentCategory, flag })
+        })
+          .then(res => {
+            if (!res.ok) {
+              return res.json().then(data => { throw new Error(data.error || 'Error checking flag.'); });
+            }
+            return res.json();
+          })
+          .then(data => {
+            flagResult.textContent = data.message;
+            if (data.message.indexOf("Correct flag") !== -1) {
+              const solvedBox = document.querySelector(`.challenge-box[data-category="${currentCategory}"]`);
+              if (solvedBox) {
+                solvedBox.style.backgroundColor = "#2467ea";
+              }
+            }
+            fetchTeamScores();
+            updateChallengeBoxesFromTeam();
+          })
+          .catch(err => {
+            console.error('Error checking flag:', err);
+            flagResult.textContent = err.message;
+          });
+      });
+    });
+
+    // Mobile Menu Toggle
+    document.addEventListener('DOMContentLoaded', function() {
+      const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+      const body = document.body;
+      if (mobileMenuToggle) {
+        mobileMenuToggle.addEventListener('click', function() {
+          body.classList.toggle('mobile-menu-open');
+        }); 
+      }
+    });
   </script>
 </body>
 </html>
+
